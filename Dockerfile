@@ -1,16 +1,17 @@
-FROM tiangolo/uvicorn-gunicorn:python3.6-alpine3.8 AS base_container
-
-ENV QS_HOME=/usr/local/radagast
+FROM python:3.6-slim AS base_container
+ENV QS_HOME=/usr/local/qs
 WORKDIR ${QS_HOME}
 
+FROM base_container AS testing_container
 COPY querysheild ${QS_HOME}/query-sheild
 COPY setup.py ${QS_HOME}/setup.py
-
-FROM base_container AS testing_container
 COPY tests ${QS_HOME}/tests
-RUN python ./setup.py test
+RUN python ${QS_HOME}/setup.py test
 
 FROM base_container AS production_container
-RUN python ./setup.py install
-ENTRYPOINT ["querysheild"]
+COPY querysheild ${QS_HOME}/query-sheild
+COPY setup.py ${QS_HOME}/setup.py
+RUN pip install .
+
 EXPOSE 5000
+ENTRYPOINT qs

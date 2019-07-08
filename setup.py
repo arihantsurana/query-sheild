@@ -1,17 +1,18 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='query-sheild',
+    name='querysheild',
+    version='0.1',
     packages=find_packages(include=["querysheild", "querysheild*"]),
     include_package_data=True,
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'querysheild=querysheild.app:run'
+            'qs=querysheild.app:run'
         ]
     },
     install_requires=[
-        'Flask',
+        'Flask==1.1.0',
         'SQLAlchemy',
         'Flask-Dance[sqla]'
     ],
